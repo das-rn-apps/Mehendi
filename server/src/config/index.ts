@@ -18,8 +18,8 @@ const config = {
   },
   jwt: {
     secret: process.env.JWT_SECRET || "supersecret",
-    accessTokenExpiration: process.env.JWT_ACCESS_TOKEN_EXPIRATION || "15m",
-    refreshTokenExpiration: process.env.JWT_REFRESH_TOKEN_EXPIRATION || "7d",
+    accessTokenExpiration: process.env.JWT_ACCESS_TOKEN_EXPIRATION || 15,
+    refreshTokenExpiration: process.env.JWT_REFRESH_TOKEN_EXPIRATION || 7,
     refreshTokenCookieName:
       process.env.JWT_REFRESH_TOKEN_COOKIE_NAME || "refreshToken",
   },

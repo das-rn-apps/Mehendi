@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 export enum TokenType {
   REFRESH = "refresh",
+  ACCESS = "access",
   RESET_PASSWORD = "resetPassword",
   VERIFY_EMAIL = "verifyEmail",
   VERIFY_PHONE_OTP = "verifyPhoneOtp",

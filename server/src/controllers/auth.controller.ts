@@ -95,7 +95,7 @@ export const login = asyncHandler(
 
     const user = await User.findOne({ email }).select(
       "+password +refreshToken"
-    ); // Include password and refreshToken
+    );
     if (!user || !(await user.comparePassword(password))) {
       return next(
         new ApiError(
@@ -106,10 +106,6 @@ export const login = asyncHandler(
     }
 
     if (!user.isEmailVerified) {
-      // Option: Resend verification email/OTP
-      // const otp = generateOtp();
-      // await storeOtp(user._id.toString(), otp, 'emailVerification');
-      // await sendOtpEmail(user.email, user.fullName, otp, 'email verification');
       return next(
         new ApiError(
           httpStatusCodes.UNAUTHORIZED,
@@ -131,11 +127,22 @@ export const login = asyncHandler(
       user
     );
 
-    // Set refresh token in HTTP-only cookie
+    // Calculate expiration times
+    const accessTokenExpires = new Date(
+      Date.now() +
+        parseInt(String(config.jwt.accessTokenExpiration)) * 60 * 1000
+    );
+
     const refreshTokenExpires = new Date(
       Date.now() +
-        parseInt(config.jwt.refreshTokenExpiration) * 24 * 60 * 60 * 1000
-    ); // Days to ms
+        parseInt(String(config.jwt.refreshTokenExpiration)) *
+          24 *
+          60 *
+          60 *
+          1000
+    );
+
+    // Set refresh token in HTTP-only cookie
     setTokenCookie(
       res,
       config.jwt.refreshTokenCookieName,
@@ -148,18 +155,19 @@ export const login = asyncHandler(
     await user.save({ validateBeforeSave: false });
 
     const userResponse = user.toObject();
-    // delete userResponse.password; // Already handled by toJSON
-    // delete userResponse.refreshToken;
 
-    res
-      .status(httpStatusCodes.OK)
-      .json(
-        new ApiResponse(
-          httpStatusCodes.OK,
-          { user: userResponse, accessToken },
-          "Login successful"
-        )
-      );
+    res.status(httpStatusCodes.OK).json(
+      new ApiResponse(
+        httpStatusCodes.OK,
+        {
+          user: userResponse,
+          accessToken,
+          accessTokenExpires,
+          refreshTokenExpires,
+        },
+        "Login successful"
+      )
+    );
   }
 );
 
@@ -241,8 +249,13 @@ export const refreshTokens = asyncHandler(
 
       const refreshTokenExpires = new Date(
         Date.now() +
-          parseInt(config.jwt.refreshTokenExpiration) * 24 * 60 * 60 * 1000
+          parseInt(String(config.jwt.refreshTokenExpiration)) *
+            24 *
+            60 *
+            60 *
+            1000
       );
+
       setTokenCookie(
         res,
         config.jwt.refreshTokenCookieName,

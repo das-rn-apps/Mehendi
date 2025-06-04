@@ -20,7 +20,7 @@ const generateToken = (
   secret: string = config.jwt.secret
 ): string => {
   const payload = {
-    sub: userId, // Subject (user ID)
+    user_id: userId, // Subject (user ID)
     iat: moment().unix(), // Issued at
     exp: expires.unix(), // Expiration time
     type,
@@ -82,9 +82,11 @@ export const verifyToken = async (
 /**
  * Generate auth tokens (access and refresh)
  */
+
 export const generateAuthTokens = async (
   user: IUserDocument
 ): Promise<{ accessToken: string; refreshToken: string }> => {
+  // Access Token
   const accessTokenExpires = moment().add(
     config.jwt.accessTokenExpiration,
     "minutes"
@@ -93,9 +95,10 @@ export const generateAuthTokens = async (
     user._id,
     user.role,
     accessTokenExpires,
-    TokenType.REFRESH
-  ); // Using REFRESH as a generic type for access token for now
+    TokenType.ACCESS
+  );
 
+  // Refresh Token
   const refreshTokenExpires = moment().add(
     config.jwt.refreshTokenExpiration,
     "days"
@@ -106,10 +109,9 @@ export const generateAuthTokens = async (
     refreshTokenExpires,
     TokenType.REFRESH,
     config.jwt.secret
-  ); // Use the same secret or a different one for refresh tokens
+  );
 
-  // Save the refresh token to the database (or to the user document)
-  // await saveToken(refreshToken, user._id, refreshTokenExpires, TokenType.REFRESH);
+  // Save to user
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
 
