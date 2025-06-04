@@ -13,13 +13,18 @@ import pick from "../utils/pick";
 
 // Utility to upload to Cloudinary (can be moved to a helper file)
 const uploadToCloudinary = async (
-  filePath: string,
+  file: Express.Multer.File,
   folder: string
 ): Promise<{ public_id: string; url: string }> => {
-  const result = await cloudinary.uploader.upload(filePath, {
+  const base64Data = `data:${file.mimetype};base64,${file.buffer.toString(
+    "base64"
+  )}`;
+
+  const result = await cloudinary.uploader.upload(base64Data, {
     folder,
     resource_type: "image",
   });
+
   return { public_id: result.public_id, url: result.secure_url };
 };
 
@@ -37,7 +42,6 @@ export const createDesign = asyncHandler(
 
     const { title, description, category, tags, isFeatured, isActive } =
       req.body;
-
     if (!req.files || (Array.isArray(req.files) && req.files.length === 0)) {
       return next(
         new ApiError(
@@ -55,7 +59,7 @@ export const createDesign = asyncHandler(
     for (const file of filesToUpload) {
       try {
         const result = await uploadToCloudinary(
-          file.path,
+          file,
           `mehndi_app/designs/${artistId}`
         );
         uploadedImages.push({
@@ -333,7 +337,7 @@ export const addImageToDesign = asyncHandler(
     }
 
     const result = await uploadToCloudinary(
-      req.file.path,
+      req.file,
       `mehndi_app/designs/${design.artist}/${designId}`
     );
     design.images.push({

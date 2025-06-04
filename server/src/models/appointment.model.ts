@@ -11,14 +11,13 @@ export interface IAppointment {
   durationMinutes?: number; // e.g., 120 minutes
   serviceType: string; // e.g., "Bridal Mehendi", "Party Mehendi"
   location: {
-    // Can be client's location or artist's studio
     address: string;
     city: string;
     postalCode?: string;
+    notes?: string;
     coordinates?: {
-      // Optional: for map integration
       type: "Point";
-      coordinates: [number, number]; // [longitude, latitude]
+      coordinates: [number, number];
     };
   };
   notes?: string; // Special requests from user
@@ -89,9 +88,10 @@ const appointmentSchema = new Schema<IAppointmentDocument, IAppointmentModel>(
       address: { type: String, required: true },
       city: { type: String, required: true },
       postalCode: String,
+      notes: String,
       coordinates: {
         type: { type: String, enum: ["Point"], default: undefined },
-        coordinates: { type: [Number], default: undefined }, // [longitude, latitude]
+        coordinates: { type: [Number], default: undefined },
       },
     },
     notes: {

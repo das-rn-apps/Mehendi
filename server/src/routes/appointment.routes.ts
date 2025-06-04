@@ -18,7 +18,7 @@ router.use(protect); // All appointment routes require authentication
 // Create a new appointment (User role)
 router.post(
   "/",
-  authorize([UserRole.USER, UserRole.ADMIN]), // Admin can book for a user too
+  authorize([UserRole.USER, UserRole.ADMIN, UserRole.ARTIST]), // Admin can book for a user too
   validate(createAppointmentSchema),
   appointmentController.createAppointment
 );

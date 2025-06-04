@@ -25,8 +25,15 @@ export const createAppointmentSchema = {
       city: Joi.string().trim().required().max(100),
       postalCode: Joi.string().trim().max(20).optional().allow(""),
       notes: Joi.string().trim().max(255).optional().allow(""),
-      // coordinates could be auto-geocoded or optionally provided
+      coordinates: Joi.object({
+        type: Joi.string().valid("Point").required(),
+        coordinates: Joi.array()
+          .ordered(Joi.number().required(), Joi.number().required()) // [lng, lat]
+          .length(2)
+          .required(),
+      }).optional(),
     }).required(),
+
     notes: Joi.string().trim().max(1000).optional().allow(""),
     price: Joi.number().min(0).optional(), // Price might be set by artist or negotiated
   }),
