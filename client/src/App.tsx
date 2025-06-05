@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import RegisterPage from './pages/RegisterPage';
+import MyAppointmentPage from './pages/MyAppointmentPage';
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
           <Route path="artists/:id" element={<ArtistDetailPage />} />
           <Route path="designs" element={<DesignsPage />} />
           <Route path="designs/:id" element={<DesignDetailPage />} />
-          <Route path="book-appointment/:artistId?" element={<BookAppointmentPage />} />
+          <Route path="book-appointment/:artistId" element={<BookAppointmentPage />} />
+          <Route path="my-appointments" element={<MyAppointmentPage />} />
           {/* Add more routes as needed */}
           <Route path="*" element={<NotFoundPage />} />
         </Route>

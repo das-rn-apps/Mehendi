@@ -43,7 +43,6 @@ export const protect = async (
     try {
       decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
     } catch (jwtError) {
-      console.error("JWT Verification Error:", jwtError);
       return next(
         new ApiError(
           httpStatusCodes.UNAUTHORIZED,

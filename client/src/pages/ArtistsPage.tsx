@@ -11,16 +11,17 @@ const ArtistsPage: React.FC = () => {
 
     useEffect(() => {
         const fetchArtists = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const fetchedArtists = await getAllArtists();
-                setArtists(fetchedArtists);
-            } catch (err: any) {
-                setError(err.response?.data?.message || 'Failed to fetch artists.');
-                console.error('Error fetching artists:', err);
-            } finally {
-                setLoading(false);
+            if (artists?.length === 0 && !loading) {
+                setLoading(true);
+                try {
+                    const fetchedArtists = await getAllArtists();
+                    setArtists(fetchedArtists);
+                } catch (err: any) {
+                    setError(err.response?.data?.message || 'Failed to fetch artists.');
+                    console.error('Error fetching artists:', err);
+                } finally {
+                    setLoading(false);
+                }
             }
         };
 

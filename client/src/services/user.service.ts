@@ -8,7 +8,7 @@ export const getAllUsers = async (): Promise<IUser[]> => {
 
 export const getUserById = async (id: string): Promise<IUser> => {
   const response = await api.get(`/users/${id}`);
-  return response.data.user;
+  return response.data.data.user;
 };
 
 export const updateMe = async (userData: Partial<IUser>): Promise<IUser> => {
@@ -29,11 +29,11 @@ export const updatePassword = async (
 
 // Artist specific services
 export const getAllArtists = async (): Promise<IUser[]> => {
-  const response = await api.get("/users/artists"); // Assuming an endpoint for artists
-  return response.data.artists;
+  const response = await api.get("/users/artists/public");
+  return response.data.data.artists;
 };
 
-export const getArtistById = async (id: string): Promise<IUser> => {
-  const response = await api.get(`/users/artists/${id}`);
-  return response.data.artist;
+export const getArtistById = async (artistId: string): Promise<IUser> => {
+  const response = await api.get(`/users/artists/public/${artistId}`);
+  return response.data.data.artist;
 };

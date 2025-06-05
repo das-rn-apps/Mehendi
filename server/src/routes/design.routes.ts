@@ -36,7 +36,7 @@ router.post(
   designController.likeDesign
 );
 
-// --- Artist Specific Routes for Managing Their Designs ---
+// --- Artist Specific Routes for Managing Their Designs --
 router.post(
   "/",
   protect,

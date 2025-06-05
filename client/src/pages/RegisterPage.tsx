@@ -12,7 +12,7 @@ const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState<UserRole>("client"); // Default to Client
+    const [role, setRole] = useState<UserRole>("user"); // Default to Client
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -143,8 +143,9 @@ const RegisterPage: React.FC = () => {
                                 onChange={(e) => setRole(e.target.value as UserRole)}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                             >
-                                <option value={"client"}>Client</option>
+                                <option value={"user"}>Client</option>
                                 <option value={"artist"}>Artist</option>
+                                <option value={"admin"}>Admin</option>
                             </select>
                         </div>
                     </div>

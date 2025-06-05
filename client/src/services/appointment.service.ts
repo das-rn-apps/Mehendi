@@ -1,5 +1,8 @@
 import api from "./api";
-import { type IAppointment } from "../interfaces/appointment.interface";
+import {
+  type IAppointment,
+  type IAppointmentResponse,
+} from "../interfaces/appointment.interface";
 
 export const createAppointment = async (
   appointmentData: Partial<IAppointment>
@@ -8,9 +11,9 @@ export const createAppointment = async (
   return response.data.appointment;
 };
 
-export const getMyAppointments = async (): Promise<IAppointment[]> => {
-  const response = await api.get("/appointments/my-appointments");
-  return response.data.appointments;
+export const getMyAppointments = async (): Promise<IAppointmentResponse[]> => {
+  const response = await api.get("/appointments");
+  return response.data.data.appointments;
 };
 
 export const getArtistAppointments = async (

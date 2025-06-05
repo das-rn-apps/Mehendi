@@ -1,9 +1,10 @@
 // Change from enum to a union of string literals
-export type UserRole = "client" | "artist" | "admin";
+export type UserRole = "user" | "artist" | "admin";
 
 export interface IUser {
   _id: string; // Add _id for frontend
   firstName: string;
+  fullName: string;
   lastName: string;
   email: string;
   phone?: string;

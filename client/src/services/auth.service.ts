@@ -10,7 +10,7 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   const response = await api.post("/auth/login", { email, password });
-  return response.data;
+  return response.data.data;
 };
 
 export const register = async (

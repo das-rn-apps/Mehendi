@@ -4,13 +4,14 @@ import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { createAppointment } from '../services/appointment.service';
-import { getUserById } from '../services/user.service';
+import { getArtistById } from '../services/user.service';
 import { type IUser } from '../interfaces/user.interface';
 import { useAuth } from '../hooks/useAuth';
 import type { AppointmentStatus } from '../interfaces/appointment.interface';
+import { userStore } from '../store/userStore';
 
 const BookAppointmentPage: React.FC = () => {
-    const { artistId } = useParams<{ artistId?: string }>();
+    const { artistId } = useParams<{ artistId: string }>();
     const navigate = useNavigate();
     const { user: currentUser, isAuthenticated } = useAuth(); // Get current authenticated user
 
@@ -28,25 +29,32 @@ const BookAppointmentPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const { artists } = userStore()
 
     useEffect(() => {
-        if (artistId) {
-            const fetchArtist = async () => {
-                setLoadingArtist(true);
-                setArtistError(null);
-                try {
-                    const fetchedArtist = await getUserById(artistId);
-                    setArtist(fetchedArtist);
-                } catch (err: any) {
-                    setArtistError(err.response?.data?.message || 'Failed to load artist details.');
-                    console.error('Error fetching artist for booking:', err);
-                } finally {
-                    setLoadingArtist(false);
+        if (!artistId) return;
+        const fetchArtist = async () => {
+            setLoadingArtist(true);
+            setArtistError(null);
+            try {
+                const localArtist = artists.find(d => d._id === artistId);
+                if (localArtist) {
+                    setArtist(localArtist);
+                    return;
                 }
-            };
-            fetchArtist();
-        }
-    }, [artistId]);
+                const fetchedArtist = await getArtistById(artistId);
+                setArtist(fetchedArtist);
+            } catch (err: any) {
+                setArtistError(err.response?.data?.message || 'Failed to load artist details.');
+                console.error('Error fetching artist for booking:', err);
+            } finally {
+                setLoadingArtist(false);
+            }
+        };
+
+        fetchArtist();
+    }, [artistId, artists]);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -100,11 +108,11 @@ const BookAppointmentPage: React.FC = () => {
             setCity('');
             setPostalCode('');
             setNotes('');
-            setTimeout(() => navigate('/profile/my-appointments'), 3000); // Redirect to user's appointments
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to book appointment. Please try again.');
             console.error('Appointment booking error:', err);
         } finally {
+            navigate('/my-appointments')
             setIsLoading(false);
         }
     };

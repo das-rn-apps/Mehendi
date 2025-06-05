@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { useAuth } from '../../hooks/useAuth';
 import Button from './Button';
 import { getInitials } from '../../utils/helpers';
@@ -7,24 +7,42 @@ import { getInitials } from '../../utils/helpers';
 const Header: React.FC = () => {
     const { isAuthenticated, user, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation(); // Get current location object
+
+    // Helper function to determine if a link is active
+    const isActiveLink = (path: string) => {
+        return location.pathname === path;
+    };
+
+    const activeClasses = 'text-indigo-600'; // Styles for active link
+    const inactiveClasses = 'text-gray-600 hover:text-red-600 transition-colors'; // Default styles
 
     return (
         <header className="bg-white shadow-md">
             <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <Link to="/" className="text-2xl font-bold text-indigo-600">
-                    MehendiApp
+                    InduHenna
                 </Link>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center space-x-6">
-                    <Link to="/designs" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                    <Link
+                        to="/designs"
+                        className={`${inactiveClasses} ${isActiveLink('/designs') ? activeClasses : ''}`}
+                    >
                         Designs
                     </Link>
-                    <Link to="/artists" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                    <Link
+                        to="/artists"
+                        className={`${inactiveClasses} ${isActiveLink('/artists') ? activeClasses : ''}`}
+                    >
                         Artists
                     </Link>
-                    <Link to="/book-appointment" className="text-gray-600 hover:text-indigo-600 transition-colors">
-                        Book Appointment
+                    <Link
+                        to="/my-appointments"
+                        className={`${inactiveClasses} ${isActiveLink('/my-appointments') ? activeClasses : ''}`}
+                    >
+                        My Appointments
                     </Link>
                     {isAuthenticated ? (
                         <div className="relative group">
@@ -39,11 +57,17 @@ const Header: React.FC = () => {
                                 <span className="text-gray-700">{user?.firstName}</span>
                             </button>
                             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 hidden group-hover:block">
-                                <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <Link
+                                    to="/profile"
+                                    className={`block px-4 py-2 text-gray-700 hover:bg-gray-100 ${isActiveLink('/profile') ? 'bg-gray-100 font-semibold' : ''}`}
+                                >
                                     Profile
                                 </Link>
                                 {user?.role === 'artist' && (
-                                    <Link to="/artist/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <Link
+                                        to="/artist/dashboard"
+                                        className={`block px-4 py-2 text-gray-700 hover:bg-gray-100 ${isActiveLink('/artist/dashboard') ? 'bg-gray-100 font-semibold' : ''}`}
+                                    >
                                         Artist Dashboard
                                     </Link>
                                 )}
@@ -93,22 +117,42 @@ const Header: React.FC = () => {
             {isMobileMenuOpen && (
                 <div className="md:hidden bg-white shadow-lg pb-4">
                     <div className="flex flex-col items-center space-y-4">
-                        <Link to="/designs" className="text-gray-600 hover:text-indigo-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link
+                            to="/designs"
+                            className={`text-gray-600 hover:text-indigo-600 ${isActiveLink('/designs') ? activeClasses : ''}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
                             Designs
                         </Link>
-                        <Link to="/artists" className="text-gray-600 hover:text-indigo-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link
+                            to="/artists"
+                            className={`text-gray-600 hover:text-indigo-600 ${isActiveLink('/artists') ? activeClasses : ''}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
                             Artists
                         </Link>
-                        <Link to="/book-appointment" className="text-gray-600 hover:text-indigo-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link
+                            to="/book-appointment"
+                            className={`text-gray-600 hover:text-indigo-600 ${isActiveLink('/book-appointment') ? activeClasses : ''}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
                             Book Appointment
                         </Link>
                         {isAuthenticated ? (
                             <>
-                                <Link to="/profile" className="text-gray-600 hover:text-indigo-600" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Link
+                                    to="/profile"
+                                    className={`text-gray-600 hover:text-indigo-600 ${isActiveLink('/profile') ? activeClasses : ''}`}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
                                     Profile
                                 </Link>
                                 {user?.role === 'artist' && (
-                                    <Link to="/artist/dashboard" className="text-gray-600 hover:text-indigo-600" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link
+                                        to="/artist/dashboard"
+                                        className={`text-gray-600 hover:text-indigo-600 ${isActiveLink('/artist/dashboard') ? activeClasses : ''}`}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         Artist Dashboard
                                     </Link>
                                 )}

@@ -5,7 +5,9 @@ import { objectIdSchema } from "./user.validator";
 export const createAppointmentSchema = {
   body: Joi.object().keys({
     artist: objectIdSchema.required(),
+    user: objectIdSchema.required(),
     design: objectIdSchema.optional(),
+    status: Joi.string().trim().required().min(3).max(100),
     appointmentDate: Joi.date().iso().greater("now").required().messages({
       "date.greater": "Appointment date must be in the future.",
       "date.iso":

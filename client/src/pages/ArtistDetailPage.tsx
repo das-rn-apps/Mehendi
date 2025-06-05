@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getUserById } from '../services/user.service';
+import { getArtistById } from '../services/user.service';
 import { userStore } from '../store/userStore';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Button from '../components/common/Button';
 import { getInitials } from '../utils/helpers';
 import DesignCard from '../components/designs/DesignCard';
-import { getAllDesigns } from '../services/design.service';
 import { type IDesign } from '../interfaces/design.interface'; // Import IDesign
+import { designStore } from '../store/designStore';
 
 const ArtistDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -15,14 +15,17 @@ const ArtistDetailPage: React.FC = () => {
     const [artistDesigns, setArtistDesigns] = React.useState<IDesign[]>([]); // State to hold artist's designs
     const [designsLoading, setDesignsLoading] = React.useState(false);
     const [designsError, setDesignsError] = React.useState<string | null>(null);
+    const { designs } = designStore();
+
 
     useEffect(() => {
         const fetchArtist = async () => {
+            console.log(id)
             if (!id) return;
             setLoading(true);
             setError(null);
             try {
-                const fetchedArtist = await getUserById(id);
+                const fetchedArtist = await getArtistById(id);
                 setSelectedUser(fetchedArtist);
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Failed to fetch artist details.');
@@ -37,9 +40,8 @@ const ArtistDetailPage: React.FC = () => {
             setDesignsLoading(true);
             setDesignsError(null);
             try {
-                // Assuming your backend supports filtering designs by artist ID
-                const designs = await getAllDesigns({ artist: id });
-                setArtistDesigns(designs);
+                const artist_designs = designs.filter(d => d.artist._id === id);
+                setArtistDesigns(artist_designs);
             } catch (err: any) {
                 setDesignsError(err.response?.data?.message || 'Failed to fetch artist designs.');
                 console.error('Error fetching artist designs:', err);

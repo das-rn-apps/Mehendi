@@ -109,6 +109,6 @@ export const changePasswordSchema = {
 
 export const userIdParamSchema = {
   params: Joi.object().keys({
-    userId: objectIdSchema.required(),
+    artistId: objectIdSchema.required(),
   }),
 };

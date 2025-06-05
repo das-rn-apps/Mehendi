@@ -20,7 +20,7 @@ const LoginPage: React.FC = () => {
 
         try {
             const response = await login(email, password);
-            setLogin(response.token, response.user);
+            setLogin(response.accessToken, response.user);
             navigate('/'); // Redirect to home or dashboard on successful login
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
