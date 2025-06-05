@@ -25,7 +25,7 @@ const FeaturedDesigns: React.FC = () => {
         };
 
         fetchFeaturedDesigns();
-    }, [featuredDesigns, setLoading, setFeaturedDesigns, setError]);
+    }, [featuredDesigns.length, setLoading, setFeaturedDesigns, setError]);
 
     return (
         <section className="container mx-auto px-4 py-12">
