@@ -37,7 +37,7 @@ const MyAppointmentPage: React.FC = () => {
         };
 
         fetchAppointments();
-    }, [user, appointments, setAppointments, setError, setLoading]);
+    }, [user, appointments, setAppointments]);
 
     return (
         <div className="mx-auto py-10 px-4">
