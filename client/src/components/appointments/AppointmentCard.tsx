@@ -36,7 +36,7 @@ const AppointmentCard: React.FC<Props> = ({ appointment }) => {
     };
 
     return (
-        <div className="bg-white border border-gray-200 shadow rounded-xl p-4 hover:shadow-md transition duration-200 min-h-[80px] flex flex-col justify-between">
+        <div className="bg-white shadow rounded-xl p-4 hover:shadow-md transition duration-200 min-h-[80px] flex flex-col justify-between">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 h-full">
 
                 {/* Left Column */}

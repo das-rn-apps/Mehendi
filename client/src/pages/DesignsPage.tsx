@@ -53,12 +53,12 @@ const DesignsPage: React.FC = () => {
                 <input
                     type="text"
                     placeholder="Search designs by title, description, or tags..."
-                    className="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="flex-grow p-3 border border-black rounded-lg focus:outline-none bg-white "
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <select
-                    className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="p-3 border border-black rounded-lg focus:outline-none"
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
                 >
